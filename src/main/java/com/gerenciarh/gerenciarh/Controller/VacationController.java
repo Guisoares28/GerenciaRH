@@ -1,0 +1,29 @@
+package com.gerenciarh.gerenciarh.Controller;
+import com.gerenciarh.gerenciarh.DtosRequest.VacationRequestDto;
+import com.gerenciarh.gerenciarh.Services.VacationService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+
+
+@RestController
+@RequestMapping("/vacation")
+public class VacationController {
+
+    private final VacationService vacationService;
+
+    public VacationController(VacationService vacationService) {
+        this.vacationService = vacationService;
+    }
+
+    @PostMapping()
+    public ResponseEntity<Void> requestVacationController(@Valid @RequestBody VacationRequestDto vacationRequestDto) {
+        vacationService.requestVacation(vacationRequestDto);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+
+
+}
