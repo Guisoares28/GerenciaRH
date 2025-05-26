@@ -5,10 +5,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.gerenciarh.gerenciarh.Exceptions.UnauthorizedException;
 import com.gerenciarh.gerenciarh.Models.User;
-import io.github.cdimascio.dotenv.Dotenv;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -17,12 +14,6 @@ import java.util.Date;
 
 @Service
 public class JwtService {
-
-    Dotenv dotenv = Dotenv.load();
-
-    public Dotenv getDotenv() {
-        return dotenv;
-    }
 
     public String gerarToken(User user){
         Algorithm algorithm = Algorithm.HMAC256(System.getenv("SECRET_KEY"));
