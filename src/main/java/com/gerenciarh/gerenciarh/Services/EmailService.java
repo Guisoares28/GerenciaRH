@@ -28,11 +28,7 @@ import java.util.Map;
 @Service
 public class EmailService {
 
-    @Value("${spring.mail.username}")
-    private String sender;
-
-    @Value("${spring.token.authentication}")
-    private String APY_KEY;
+    private String sender = "gerenciarh645@gmail.com";
 
     public EmailService() {
     }
@@ -48,7 +44,7 @@ public class EmailService {
         Content content = new Content("text/plain", body);
         Mail mail = new Mail(from, subject, to, content);
 
-        SendGrid sg = new SendGrid(APY_KEY);
+        SendGrid sg = new SendGrid(System.getenv("TOKEN"));
         Request request = new Request();
         try {
             request.setMethod(Method.POST);
