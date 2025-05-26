@@ -1,13 +1,17 @@
 package com.gerenciarh.gerenciarh.Services;
 
-import org.apache.commons.lang3.RandomStringUtils;
+import org.passay.PasswordGenerator;
 import org.springframework.stereotype.Service;
+
+import java.security.SecureRandom;
 
 @Service
 public class GeneratedPasswordService {
 
     public static String generatedPassword() {
-        return RandomStringUtils.randomAlphanumeric(12);
+        PasswordGenerator generator = new PasswordGenerator();
+        String senha = generatedPassword();
+        return senha;
     }
 
 }
