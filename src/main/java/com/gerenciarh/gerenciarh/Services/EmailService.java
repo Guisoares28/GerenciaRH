@@ -1,5 +1,10 @@
 package com.gerenciarh.gerenciarh.Services;
 
+import java.io.IOException;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
 import com.gerenciarh.gerenciarh.Models.User;
 import com.sendgrid.Method;
 import com.sendgrid.Request;
@@ -8,27 +13,14 @@ import com.sendgrid.SendGrid;
 import com.sendgrid.helpers.mail.Mail;
 import com.sendgrid.helpers.mail.objects.Content;
 import com.sendgrid.helpers.mail.objects.Email;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
-import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 
 @Service
 public class EmailService {
 
-    private String sender = "gerenciarh645@gmail.com";
+    private final String sender = "gerenciarh645@gmail.com";
+
+    @Value("${EMAIL_TOKEN}")
+    private final String TOKEN = new String();
 
     public EmailService() {
     }
@@ -44,7 +36,7 @@ public class EmailService {
         Content content = new Content("text/plain", body);
         Mail mail = new Mail(from, subject, to, content);
 
-        SendGrid sg = new SendGrid(System.getenv("TOKEN"));
+        SendGrid sg = new SendGrid(TOKEN);
         Request request = new Request();
         try {
             request.setMethod(Method.POST);
