@@ -1,18 +1,20 @@
 package com.gerenciarh.gerenciarh.DtosRequest;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.gerenciarh.gerenciarh.Enums.EnumTypeRole;
-import jakarta.validation.constraints.NotBlank;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.gerenciarh.gerenciarh.Enums.EnumTypeRole;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public record UserRequestDto(
         @NotBlank(message = "Name not given")
         String name,
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-        @NotBlank(message = "Contract date not given")
+        @NotNull(message = "Contract date not given")
         LocalDate contractDate,
 
         @NotBlank(message = "Nickname not given")
@@ -24,7 +26,7 @@ public record UserRequestDto(
         @NotBlank(message = "Cpf not given")
         String cpf,
 
-        @NotBlank(message = "Balance not given")
+        @NotNull(message = "Salary not given")
         BigDecimal salario,
 
         @NotBlank(message = "Email not given")
@@ -36,7 +38,7 @@ public record UserRequestDto(
         @NotBlank(message = "Department name not given")
         String departmentName,
 
-        @NotBlank(message = "Role not given")
+        @NotNull(message = "Role not given")
         EnumTypeRole role
 ) {
 }
