@@ -43,7 +43,7 @@ public class VacationController {
     }
 
     @GetMapping("/{username}")
-    public ResponseEntity<List<VacationResponseDto>> findVacationByUsernameController(@PathVariable String username) {
+    public ResponseEntity<List<VacationResponseDto>> findVacationByUsernameController(@PathVariable(value = "username") String username) {
         List<VacationResponseDto> vacations = vacationService.findAllVacationForUserName(username);
         return ResponseEntity.status(HttpStatus.OK).body(vacations);
 
