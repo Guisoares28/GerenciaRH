@@ -1,6 +1,8 @@
 package com.gerenciarh.gerenciarh.Services;
 
 
+import org.springframework.stereotype.Service;
+
 import com.gerenciarh.gerenciarh.DtosRequest.VacationRequestDto;
 import com.gerenciarh.gerenciarh.Enums.EnumTypeVacationStatus;
 import com.gerenciarh.gerenciarh.Models.User;
@@ -10,7 +12,8 @@ import com.gerenciarh.gerenciarh.Repositories.VacationRepository;
 import com.gerenciarh.gerenciarh.Utils.AuthenticationUserHolder;
 import com.gerenciarh.gerenciarh.Utils.AuthenticationUtils;
 import com.gerenciarh.gerenciarh.Utils.VacationUtils;
-import org.springframework.stereotype.Service;
+
+import jakarta.transaction.Transactional;
 
 
 @Service
@@ -28,6 +31,7 @@ public class VacationService {
         this.userRepository = userRepository;
     }
 
+    @Transactional
     public void requestVacation(VacationRequestDto vacationRequestDto) {
 
         User user = AuthenticationUserHolder.get();
