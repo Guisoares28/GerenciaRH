@@ -1,11 +1,7 @@
 package com.gerenciarh.gerenciarh.Controller;
 
 import com.gerenciarh.gerenciarh.DtosResponse.NotificationResponseDto;
-import com.gerenciarh.gerenciarh.Models.Notification;
-import com.gerenciarh.gerenciarh.Models.User;
 import com.gerenciarh.gerenciarh.Services.NotificationService;
-import com.gerenciarh.gerenciarh.Utils.AuthenticationUserHolder;
-import com.gerenciarh.gerenciarh.Utils.NotificationUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
