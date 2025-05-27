@@ -28,7 +28,7 @@ public class VacationUtils {
                     ))
                     .toList();
         }catch (Exception ex){
-            throw new VacationException("Não foi possível converter Vacation para Dto");
+            throw new RuntimeException("Não foi possível converter Vacation para Dto");
         }
 
     }

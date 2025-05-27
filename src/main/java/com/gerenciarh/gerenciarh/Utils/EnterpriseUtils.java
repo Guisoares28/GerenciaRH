@@ -1,7 +1,6 @@
 package com.gerenciarh.gerenciarh.Utils;
 
 import com.gerenciarh.gerenciarh.DtosRequest.EnterpriseRequestDto;
-import com.gerenciarh.gerenciarh.Exceptions.EnterpriseException;
 import com.gerenciarh.gerenciarh.Models.Enterprise;
 
 public class EnterpriseUtils {
@@ -16,7 +15,7 @@ public class EnterpriseUtils {
                     enterpriseRequestDto.email()
             );
         }catch (Exception ex){
-            throw new EnterpriseException("Não foi possível converter a empresa para Model");
+            throw new RuntimeException("Não foi possível converter a empresa para Model");
         }
     }
 
