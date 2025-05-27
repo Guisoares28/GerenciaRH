@@ -1,9 +1,12 @@
 package com.gerenciarh.gerenciarh.Services;
 
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.gerenciarh.gerenciarh.DtosRequest.VacationRequestDto;
+import com.gerenciarh.gerenciarh.DtosResponse.VacationResponseDto;
 import com.gerenciarh.gerenciarh.Enums.EnumTypeVacationStatus;
 import com.gerenciarh.gerenciarh.Models.User;
 import com.gerenciarh.gerenciarh.Models.Vacation;
@@ -44,6 +47,12 @@ public class VacationService {
         notificationService.sendNotificationToRh(user, description);
     }
 
+    public List<VacationResponseDto> findAllVacations() {
+        User user = AuthenticationUserHolder.get();
+        List<Vacation> vacations = vacationRepository.findAllByUser_Enterprise_Id(user.getEnterprise().getId());
+        return VacationUtils.listVacationModelFromListDtoResponse(vacations);
+    }
+
     public void responseRequestVacation(String nickname, EnumTypeVacationStatus status) {
         User user = AuthenticationUserHolder.get();
         AuthenticationUtils.toValidUserRole(user);
@@ -58,8 +67,12 @@ public class VacationService {
         notificationService.sendNotification(user, description, userReceiver );
     }
 
+    public List<VacationResponseDto> findAllVacationForUserName (String username) {
+        User user = AuthenticationUserHolder.get();
 
+        List<Vacation> vacations = vacationRepository.findAllByUser_NameContainingIgnoreCaseAndUser_Enterprise_Id(username,
+         user.getEnterprise().getId());
 
-
-
+        return VacationUtils.listVacationModelFromListDtoResponse(vacations);
+    }
 }

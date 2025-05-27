@@ -1,13 +1,18 @@
 package com.gerenciarh.gerenciarh.Controller;
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gerenciarh.gerenciarh.DtosRequest.VacationRequestDto;
+import com.gerenciarh.gerenciarh.DtosResponse.VacationResponseDto;
 import com.gerenciarh.gerenciarh.Services.VacationService;
 
 import jakarta.validation.Valid;
@@ -31,8 +36,18 @@ public class VacationController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+    @GetMapping()
+    public ResponseEntity<List<VacationResponseDto>> findAllVacationsController() {
+        List<VacationResponseDto> vacations = vacationService.findAllVacations();
+        return ResponseEntity.status(HttpStatus.OK).body(vacations);
+    }
 
+    @GetMapping("/{username}")
+    public ResponseEntity<List<VacationResponseDto>> findVacationByUsernameController(@PathVariable String username) {
+        List<VacationResponseDto> vacations = vacationService.findAllVacationForUserName(username);
+        return ResponseEntity.status(HttpStatus.OK).body(vacations);
 
+    }
 
 
 }
