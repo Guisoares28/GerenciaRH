@@ -12,6 +12,7 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.gerenciarh.gerenciarh.Exceptions.BusinessException;
 
 @Service
 public class RelatoriosService {
@@ -38,7 +39,7 @@ public class RelatoriosService {
             document.add(table);
             document.close();
         } catch (DocumentException e) {
-            throw new RuntimeException(e);
+            throw new BusinessException("Erro ao gerar relatório", e);
         }
         return outputStream.toByteArray();
     }

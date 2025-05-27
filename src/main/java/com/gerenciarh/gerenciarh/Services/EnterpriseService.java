@@ -2,6 +2,7 @@ package com.gerenciarh.gerenciarh.Services;
 
 import com.gerenciarh.gerenciarh.DtosRequest.EnterpriseRequestDto;
 import com.gerenciarh.gerenciarh.Enums.EnumTypeRole;
+import com.gerenciarh.gerenciarh.Exceptions.EnterpriseException;
 import com.gerenciarh.gerenciarh.Exceptions.RepeatDataException;
 import com.gerenciarh.gerenciarh.Exceptions.UnauthorizedException;
 import com.gerenciarh.gerenciarh.Models.Enterprise;
@@ -55,7 +56,7 @@ public class EnterpriseService {
         }catch (DataIntegrityViolationException ex){
             throw new RepeatDataException();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new EnterpriseException(e.getMessage(), e);
         }
     }
 
@@ -63,16 +64,16 @@ public class EnterpriseService {
         try{
             return enterpriseRepository.findByCnpj(enterpriseCnpj);
         }catch (Exception ex){
-            throw new RuntimeException("Não foi possível buscar a empresa");
+            throw new EnterpriseException("Não foi possível buscar a empresa");
         }
     }
 
     public Enterprise findEnterpriseByIdService(Long id) {
         try{
             return enterpriseRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("não foi encontrado nenhuma empresa com este id"));
+                    .orElseThrow(() -> new EnterpriseException("não foi encontrado nenhuma empresa com este id"));
         }catch (Exception ex){
-            throw new RuntimeException("Não foi possível buscar a empresa");
+            throw new EnterpriseException("Não foi possível buscar a empresa");
         }
     }
 
@@ -80,7 +81,7 @@ public class EnterpriseService {
         try{
             return enterpriseRepository.findAll();
         }catch (Exception ex){
-            throw new RuntimeException("Não foi possível buscar a empresa");
+            throw new EnterpriseException("Não foi possível buscar a empresa");
         }
     }
 
@@ -99,7 +100,7 @@ public class EnterpriseService {
             enterprise.setEmail(enterpriseRequestDto.email());
             enterpriseRepository.save(enterprise);
         }catch (Exception ex){
-            throw new RuntimeException("Não foi possível atualizar os dados da empresa");
+            throw new EnterpriseException("Não foi possível atualizar os dados da empresa");
         }
     }
 
@@ -109,7 +110,7 @@ public class EnterpriseService {
 
             enterpriseRepository.deleteById(id);
         }catch (Exception ex){
-            throw new RuntimeException("Não foi possível deletar a empresa");
+            throw new EnterpriseException("Não foi possível deletar a empresa");
         }
     }
     @Transactional
@@ -123,7 +124,7 @@ public class EnterpriseService {
             AuthenticationUtils.toValidUserEnterprise(user, enterprise);
             enterpriseRepository.deleteByCnpj(enterprise.getCnpj());
         }catch (Exception ex){
-            throw new RuntimeException("Não foi possível deletar a empresa");
+            throw new EnterpriseException("Não foi possível deletar a empresa");
         }
     }
 }

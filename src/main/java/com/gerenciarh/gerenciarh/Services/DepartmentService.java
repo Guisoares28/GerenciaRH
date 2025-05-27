@@ -49,7 +49,7 @@ public class DepartmentService {
         Department department = departmentRepository.findByNameIgnoreCaseAndEnterprise_Id(
                         departmentName,
                         user.getEnterprise().getId())
-                                    .orElseThrow(() -> new NotFoundException());
+                                    .orElseThrow(NotFoundException::new);
         return DepartamentoUtils.ModelFromDto(department);
     }
 
@@ -68,7 +68,8 @@ public class DepartmentService {
             AuthenticationUtils.toValidUserRole(user);
 
             Department department = departmentRepository.findByNameIgnoreCaseAndEnterprise_Id(
-                name.toUpperCase(), user.getEnterprise().getId() ).orElseThrow(() -> new RuntimeException("Não foi possível encontrar o departamento"));
+                name.toUpperCase(), user.getEnterprise().getId() ).orElseThrow(() ->
+                    new NotFoundException("Department not found with name" + departamentoRequestDto.name()) );
 
             department.setname(departamentoRequestDto.name().toUpperCase());
             departmentRepository.save(department);
