@@ -7,12 +7,14 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gerenciarh.gerenciarh.DtosRequest.VacationRequestDto;
 import com.gerenciarh.gerenciarh.DtosResponse.VacationResponseDto;
+import com.gerenciarh.gerenciarh.Enums.EnumTypeVacationStatus;
 import com.gerenciarh.gerenciarh.Services.VacationService;
 
 import jakarta.validation.Valid;
@@ -49,5 +51,9 @@ public class VacationController {
 
     }
 
-
+    @PutMapping("/{vacationId}")
+    public ResponseEntity<Void> responseRequestVacationController(@PathVariable(value = "vacationId") Long vacationId, @RequestBody EnumTypeVacationStatus status) {
+        vacationService.responseRequestVacation(vacationId, status);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 }

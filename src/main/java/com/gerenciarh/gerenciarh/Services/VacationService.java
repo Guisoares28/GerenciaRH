@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.gerenciarh.gerenciarh.DtosRequest.VacationRequestDto;
 import com.gerenciarh.gerenciarh.DtosResponse.VacationResponseDto;
 import com.gerenciarh.gerenciarh.Enums.EnumTypeVacationStatus;
+import com.gerenciarh.gerenciarh.Exceptions.NotFoundException;
 import com.gerenciarh.gerenciarh.Models.User;
 import com.gerenciarh.gerenciarh.Models.Vacation;
 import com.gerenciarh.gerenciarh.Repositories.UserRepository;
@@ -53,14 +54,14 @@ public class VacationService {
         return VacationUtils.listVacationModelFromListDtoResponse(vacations);
     }
 
-    public void responseRequestVacation(String nickname, EnumTypeVacationStatus status) {
+    public void responseRequestVacation(Long vacationId, EnumTypeVacationStatus status) {
         User user = AuthenticationUserHolder.get();
         AuthenticationUtils.toValidUserRole(user);
 
-        Vacation vacation = vacationRepository.findByUser_nickname(nickname);
+        Vacation vacation = vacationRepository.findById(vacationId).orElseThrow(() -> new NotFoundException("Vacation not found"));
         vacation.setStatus(status);
 
-        User userReceiver = userRepository.findByNickname(nickname);
+        User userReceiver = vacation.getUser();
 
         String description = "Usuário " + user.getNickname() + "Mudou o status do seu pedido para " + status;
 
@@ -75,4 +76,5 @@ public class VacationService {
 
         return VacationUtils.listVacationModelFromListDtoResponse(vacations);
     }
+
 }
