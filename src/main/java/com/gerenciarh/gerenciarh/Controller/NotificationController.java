@@ -1,16 +1,18 @@
 package com.gerenciarh.gerenciarh.Controller;
 
-import com.gerenciarh.gerenciarh.DtosResponse.NotificationResponseDto;
-import com.gerenciarh.gerenciarh.Models.Notification;
-import com.gerenciarh.gerenciarh.Models.User;
-import com.gerenciarh.gerenciarh.Services.NotificationService;
-import com.gerenciarh.gerenciarh.Utils.AuthenticationUserHolder;
-import com.gerenciarh.gerenciarh.Utils.NotificationUtils;
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.gerenciarh.gerenciarh.DtosResponse.NotificationResponseDto;
+import com.gerenciarh.gerenciarh.Services.NotificationService;
 
 @RestController
 @RequestMapping("/notification")
@@ -18,7 +20,6 @@ import java.util.List;
 public class NotificationController {
 
     private final NotificationService notificationService;
-
 
     public NotificationController(NotificationService notificationService) {
         this.notificationService = notificationService;
@@ -33,6 +34,4 @@ public class NotificationController {
     public ResponseEntity<Void> readNotificationController(@PathVariable(value = "id") Long notificationId) {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
-
-
 }

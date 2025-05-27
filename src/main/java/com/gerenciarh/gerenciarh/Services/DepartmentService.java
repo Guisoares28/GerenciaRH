@@ -1,5 +1,9 @@
 package com.gerenciarh.gerenciarh.Services;
 
+import java.util.List;
+
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.stereotype.Service;
 
 import com.gerenciarh.gerenciarh.DtosRequest.DepartamentoRequestDto;
 import com.gerenciarh.gerenciarh.DtosResponse.DepartamentoDtoResponse;
@@ -11,12 +15,8 @@ import com.gerenciarh.gerenciarh.Repositories.DepartmentRepository;
 import com.gerenciarh.gerenciarh.Utils.AuthenticationUserHolder;
 import com.gerenciarh.gerenciarh.Utils.AuthenticationUtils;
 import com.gerenciarh.gerenciarh.Utils.DepartamentoUtils;
+
 import jakarta.transaction.Transactional;
-
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class DepartmentService {

@@ -1,5 +1,10 @@
 package com.gerenciarh.gerenciarh.Services;
 
+import java.io.ByteArrayOutputStream;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.gerenciarh.gerenciarh.Models.User;
 import com.gerenciarh.gerenciarh.Utils.RelatoriosUtils;
 import com.itextpdf.text.Document;
@@ -7,10 +12,6 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import org.springframework.stereotype.Service;
-
-import java.io.ByteArrayOutputStream;
-import java.util.List;
 
 @Service
 public class RelatoriosService {
