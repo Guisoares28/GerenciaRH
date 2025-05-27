@@ -1,17 +1,14 @@
 package com.gerenciarh.gerenciarh.Services;
 
-import org.passay.PasswordGenerator;
-import org.springframework.stereotype.Service;
+import java.util.UUID;
 
-import java.security.SecureRandom;
+import org.springframework.stereotype.Service;
 
 @Service
 public class GeneratedPasswordService {
 
     public static String generatedPassword() {
-        PasswordGenerator generator = new PasswordGenerator();
-        String senha = generatedPassword();
-        return senha;
+        return UUID.randomUUID().toString().substring(0, 12);
     }
 
 }
