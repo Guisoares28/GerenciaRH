@@ -1,9 +1,16 @@
 package com.gerenciarh.gerenciarh.Services;
 
+import java.util.List;
+
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
 import com.gerenciarh.gerenciarh.DtosRequest.UserRequestDto;
 import com.gerenciarh.gerenciarh.DtosResponse.UserResponseDto;
 import com.gerenciarh.gerenciarh.Enums.EnumTypeRole;
 import com.gerenciarh.gerenciarh.Exceptions.NotFoundException;
+import com.gerenciarh.gerenciarh.Exceptions.RepeatDataException;
 import com.gerenciarh.gerenciarh.Exceptions.UnauthorizedException;
 import com.gerenciarh.gerenciarh.Models.Department;
 import com.gerenciarh.gerenciarh.Models.Enterprise;
@@ -15,10 +22,6 @@ import com.gerenciarh.gerenciarh.Utils.AuthenticationUtils;
 import com.gerenciarh.gerenciarh.Utils.UserUtils;
 
 import jakarta.transaction.Transactional;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class UserService {
@@ -36,7 +39,7 @@ public class UserService {
 
     @Transactional
     public void createUser(UserRequestDto userRequestDto) {
-
+        try {
             User user = AuthenticationUserHolder.get(); 
             AuthenticationUtils.toValidUserRole(user);
 
@@ -56,6 +59,9 @@ public class UserService {
             newUser.setEnterprise(user.getEnterprise());
 
             userRepository.save(newUser);
+        } catch (DataIntegrityViolationException ex) {
+            throw new RepeatDataException();
+        }
     }
 
     public List<UserResponseDto> getAllUsers() {
@@ -93,6 +99,7 @@ public class UserService {
 
     @Transactional
     public void updateUserByName(String nickname, UserRequestDto userRequestDto) {
+        try {
 
         User authenticatedUser = AuthenticationUserHolder.get();
         AuthenticationUtils.toValidUserRole(authenticatedUser);
@@ -117,6 +124,9 @@ public class UserService {
                 .orElseThrow(() -> new NotFoundException("Departamento com nome " + userRequestDto.departmentName()
                         + " não encontrado")));
         userRepository.save(userUpdate);
+        } catch (DataIntegrityViolationException ex) {
+            throw new RepeatDataException();
+        }
     }
 
     @Transactional
