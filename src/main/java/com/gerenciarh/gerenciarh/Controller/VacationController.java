@@ -16,7 +16,10 @@ import com.gerenciarh.gerenciarh.DtosRequest.VacationRequestDto;
 import com.gerenciarh.gerenciarh.DtosRequest.VacationUpdateRequestDto;
 import com.gerenciarh.gerenciarh.DtosResponse.VacationResponseDto;
 import com.gerenciarh.gerenciarh.Enums.EnumTypeVacationStatus;
+import com.gerenciarh.gerenciarh.Models.User;
 import com.gerenciarh.gerenciarh.Services.VacationService;
+import com.gerenciarh.gerenciarh.Utils.AuthenticationUserHolder;
+import com.gerenciarh.gerenciarh.Utils.AuthenticationUtils;
 
 import jakarta.validation.Valid;
 
@@ -47,6 +50,9 @@ public class VacationController {
 
     @GetMapping("/{username}")
     public ResponseEntity<List<VacationResponseDto>> findVacationByUsernameController(@PathVariable(value = "username") String username) {
+        User user = AuthenticationUserHolder.get();
+        AuthenticationUtils.toValidUserRole(user);
+        
         List<VacationResponseDto> vacations = vacationService.findAllVacationForUserName(username);
         return ResponseEntity.status(HttpStatus.OK).body(vacations);
 
@@ -55,8 +61,12 @@ public class VacationController {
     @PutMapping("/{vacationId}")
     public ResponseEntity<Void> responseRequestVacationController(@PathVariable(value = "vacationId") Long vacationId, @RequestBody 
     VacationUpdateRequestDto vacationUpdateRequestDto) {
+        User user = AuthenticationUserHolder.get();
+        AuthenticationUtils.toValidUserRole(user);
+
         EnumTypeVacationStatus status = EnumTypeVacationStatus.valueOf(vacationUpdateRequestDto.status());
         vacationService.responseRequestVacation(vacationId,status);
+
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
