@@ -1,7 +1,15 @@
 package com.gerenciarh.gerenciarh.Services;
 
+import java.io.IOException;
+import java.util.List;
+
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
 import com.gerenciarh.gerenciarh.DtosRequest.EnterpriseRequestDto;
 import com.gerenciarh.gerenciarh.Enums.EnumTypeRole;
+import com.gerenciarh.gerenciarh.Exceptions.NotFoundException;
 import com.gerenciarh.gerenciarh.Exceptions.RepeatDataException;
 import com.gerenciarh.gerenciarh.Exceptions.UnauthorizedException;
 import com.gerenciarh.gerenciarh.Models.Enterprise;
@@ -11,14 +19,8 @@ import com.gerenciarh.gerenciarh.Repositories.UserRepository;
 import com.gerenciarh.gerenciarh.Utils.AuthenticationUserHolder;
 import com.gerenciarh.gerenciarh.Utils.AuthenticationUtils;
 import com.gerenciarh.gerenciarh.Utils.EnterpriseUtils;
+
 import jakarta.transaction.Transactional;
-
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
-
-import java.io.IOException;
-import java.util.List;
 
 @Service
 public class EnterpriseService {
@@ -63,7 +65,7 @@ public class EnterpriseService {
         try{
             return enterpriseRepository.findByCnpj(enterpriseCnpj);
         }catch (Exception ex){
-            throw new RuntimeException("Não foi possível buscar a empresa");
+            throw new NotFoundException("Não foi possível buscar a empresa");
         }
     }
 

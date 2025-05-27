@@ -19,14 +19,14 @@ import com.sendgrid.helpers.mail.objects.Email;
 @Service
 public class EmailService {
 
-    private String sender = "gerenciarh645@gmail.com";
+    private final String sender = "gerenciarh645@gmail.com";
 
     public EmailService() {
     }
     
     @Async
     public void sendEmail(String emailTo, User user) throws IOException {
-        Email from = new Email(sender);
+        Email from = new Email(sender, "GerenciarH");
 
         String subject = "New user created successfully";
 
