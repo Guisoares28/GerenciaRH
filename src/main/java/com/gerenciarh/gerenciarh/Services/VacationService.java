@@ -11,7 +11,6 @@ import com.gerenciarh.gerenciarh.Enums.EnumTypeVacationStatus;
 import com.gerenciarh.gerenciarh.Exceptions.NotFoundException;
 import com.gerenciarh.gerenciarh.Models.User;
 import com.gerenciarh.gerenciarh.Models.Vacation;
-import com.gerenciarh.gerenciarh.Repositories.UserRepository;
 import com.gerenciarh.gerenciarh.Repositories.VacationRepository;
 import com.gerenciarh.gerenciarh.Utils.AuthenticationUserHolder;
 import com.gerenciarh.gerenciarh.Utils.AuthenticationUtils;
@@ -27,12 +26,9 @@ public class VacationService {
 
     private final NotificationService notificationService;
 
-    private final UserRepository userRepository;
-
-    public VacationService(VacationRepository vacationRepository, NotificationService notificationService, UserRepository userRepository) {
+    public VacationService(VacationRepository vacationRepository, NotificationService notificationService) {
         this.vacationRepository = vacationRepository;
         this.notificationService = notificationService;
-        this.userRepository = userRepository;
     }
 
     @Transactional
