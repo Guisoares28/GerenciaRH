@@ -18,8 +18,9 @@ public class TokenEntity {
     @JoinColumn(name = "usuario_id")
     private User user;
 
-    public TokenEntity(String token) {
+    public TokenEntity(String token, User user) {
         this.token = token;
+        this.user = user;
     }
 
     public TokenEntity() {

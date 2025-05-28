@@ -34,7 +34,7 @@ public class JwtService {
                 .withExpiresAt(Date.from(expiracao))
                 .sign(algorithm);
 
-        return new TokenEntity(token);
+        return new TokenEntity(token, user);
     }
 
     public String pegarNicknameDoToken(String token){
