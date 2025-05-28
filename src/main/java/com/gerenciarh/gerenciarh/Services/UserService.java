@@ -70,7 +70,7 @@ public class UserService {
 
             List<User> users = userRepository.findAllByEnterprise_Id(user.getEnterprise().getId());
 
-            if(users.size() == 0){
+            if(users.isEmpty()){
                 throw new NotFoundException("Nenhum registro encontrado");
             }
 

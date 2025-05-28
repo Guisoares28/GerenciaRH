@@ -29,7 +29,6 @@ public class User {
     @Column(nullable = true)
     private String cpf;
 
-    @Column(nullable = true)
     private BigDecimal salario;
 
     @Column(nullable = true)
