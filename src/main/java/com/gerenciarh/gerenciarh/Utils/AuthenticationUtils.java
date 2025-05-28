@@ -14,6 +14,13 @@ public class AuthenticationUtils {
         }
     }
 
+
+    public static void toValidUserCreateDept(User user) {
+        if(!user.getRole().equals(EnumTypeRole.MASTER)) {
+            throw new UnauthorizedException();
+        }
+    }
+
     public static void toValidUserEnterprise(User user, Enterprise enterprise) {
         try{
             if(!user.getEnterprise().getId().equals(enterprise.getId())){

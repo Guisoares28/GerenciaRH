@@ -32,7 +32,7 @@ public class DepartmentService {
         try{
             User user = AuthenticationUserHolder.get();
 
-            AuthenticationUtils.toValidUserRole(user);
+            AuthenticationUtils.toValidUserCreateDept(user);
 
             Department department = new Department(
                 departamentoRequestDto.name(),
