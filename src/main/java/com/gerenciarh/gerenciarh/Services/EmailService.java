@@ -20,7 +20,7 @@ public class EmailService {
     private final String sender = "gerenciarh645@gmail.com";
 
     @Value("${EMAIL_TOKEN}")
-    private final String TOKEN = new String();
+    private String TOKEN;
 
     public EmailService() {
     }

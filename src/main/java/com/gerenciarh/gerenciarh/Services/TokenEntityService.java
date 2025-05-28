@@ -24,19 +24,23 @@ public class TokenEntityService {
         this.tokenRepository = tokenRepository;
     }
 
+    public void saveToken(TokenEntity token) {
+        tokenRepository.save(token);
+    }
+
     public List<TokenResponseDTO> getAllTokens() {
         User user = AuthenticationUserHolder.get();
         List<TokenEntity> tokens = tokenRepository.findAllByUser_Id(user.getId());
         return mapper.map(tokens,new TypeToken<List<TokenResponseDTO>>() {}.getType());
     }
 
-    public void updateTokenService(String token, TokenUpdateRequestDTO tokenUpdateDTO) {
+    public void breakToken(String token) {
         User user = AuthenticationUserHolder.get();
 
         TokenEntity newToken = tokenRepository.findByTokenAndUser_Id(token, user.getId())
                 .orElseThrow(() -> new NotFoundException("Token não encontrado"));
 
-        newToken.setStatus(tokenUpdateDTO.status());
+        newToken.setStatus(false);
         tokenRepository.save(newToken);
     }
 }

@@ -1,27 +1,41 @@
 package com.gerenciarh.gerenciarh.Services;
 
 import com.gerenciarh.gerenciarh.DtosRequest.UserLoginRequestDto;
+import com.gerenciarh.gerenciarh.DtosResponse.TokenResponseDTO;
+import com.gerenciarh.gerenciarh.Exceptions.NotFoundException;
+import com.gerenciarh.gerenciarh.Exceptions.UnauthorizedException;
 import com.gerenciarh.gerenciarh.Exceptions.UserOrPasswordInvalidException;
+import com.gerenciarh.gerenciarh.Models.TokenEntity;
 import com.gerenciarh.gerenciarh.Models.User;
 import com.gerenciarh.gerenciarh.Repositories.UserRepository;
 import com.gerenciarh.gerenciarh.Utils.PasswordUtils;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AuthService {
 
-    UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    public AuthService(UserRepository userRepository) {
+    private final JwtService jwtService;
+
+    private ModelMapper mapper = new ModelMapper();
+
+    public AuthService(UserRepository userRepository, JwtService jwtService) {
         this.userRepository = userRepository;
+        this.jwtService = jwtService;
     }
 
-    public User loadUser(UserLoginRequestDto userLoginRequestDto){
-        User user = userRepository.findByNickname(userLoginRequestDto.nickname());
-        if(!PasswordUtils.verifySenha(user.getPassword(),userLoginRequestDto.password())){
-            throw new UserOrPasswordInvalidException();
-        }else{
-            return user;
+   public TokenResponseDTO Authentication(UserLoginRequestDto userLoginRequestDto) {
+        User user = userRepository.findByNickname(userLoginRequestDto.nickname())
+                .orElseThrow(() -> new NotFoundException("Usuário ou senha incorretos"));
+
+        if(!PasswordUtils.verifySenha(user.getPassword(), userLoginRequestDto.password())){
+            throw new UnauthorizedException("Usuário ou senha incorretos");
         }
-    }
+
+       TokenEntity tokenEntity = jwtService.gerarToken(user);
+
+        return mapper.map(tokenEntity, TokenResponseDTO.class);
+   }
 }

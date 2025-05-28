@@ -25,10 +25,8 @@ public class TokenEntityController {
     }
 
     @PutMapping("/{token}")
-    public ResponseEntity<Void> updateTokenController(@PathVariable(value = "token")
-                                                          String token,
-                                                          @RequestBody TokenUpdateRequestDTO tokenDTO {
-        tokenEntityService.updateTokenService(token, tokenDTO);
+    public ResponseEntity<Void> updateTokenController(@PathVariable(value = "token") String token){
+        tokenEntityService.breakToken(token);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 

@@ -12,15 +12,14 @@ public class TokenEntity {
 
     private String token;
 
-    private boolean status;
+    private boolean status = true;
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")
     private User user;
 
-    public TokenEntity(String token, boolean status) {
+    public TokenEntity(String token) {
         this.token = token;
-        this.status = status;
     }
 
     public TokenEntity() {

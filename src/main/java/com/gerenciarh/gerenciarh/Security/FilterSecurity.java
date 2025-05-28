@@ -1,4 +1,5 @@
 package com.gerenciarh.gerenciarh.Security;
+import com.gerenciarh.gerenciarh.Exceptions.NotFoundException;
 import com.gerenciarh.gerenciarh.Models.User;
 import com.gerenciarh.gerenciarh.Repositories.UserRepository;
 import com.gerenciarh.gerenciarh.Services.JwtService;
@@ -45,7 +46,8 @@ public class FilterSecurity extends OncePerRequestFilter {
                 return;
             }else{
                 String nickname = jwtService.pegarNicknameDoToken(token);
-                User user = userRepository.findByNickname(nickname);
+                User user = userRepository.findByNickname(nickname)
+                        .orElseThrow(() -> new NotFoundException("Usuário ou senha invalidos"));
                 AuthenticationUserHolder.set(user);
                 filterChain.doFilter(request,response);
             }

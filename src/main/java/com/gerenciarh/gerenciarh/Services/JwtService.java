@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
+import com.gerenciarh.gerenciarh.Models.TokenEntity;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -17,18 +18,23 @@ import com.gerenciarh.gerenciarh.Models.User;
 @Service
 public class JwtService {
 
-    @Value("${SECRET_KEY}")
-    private final String SECRET_KEY = new String();
 
-    public String gerarToken(User user){
+    @Value("${SECRET_KEY}")
+    private String SECRET_KEY;
+
+
+    public TokenEntity gerarToken(User user){
         Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY);
         Instant agora = Instant.now();
         Instant expiracao = agora.plus(1, ChronoUnit.DAYS);
-        return JWT.create()
+
+        String token = JWT.create()
                 .withSubject(user.getNickname())
                 .withIssuer("gerenciaRH")
                 .withExpiresAt(Date.from(expiracao))
                 .sign(algorithm);
+
+        return new TokenEntity(token);
     }
 
     public String pegarNicknameDoToken(String token){

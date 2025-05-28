@@ -17,6 +17,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     void deleteByNicknameIgnoreCaseAndEnterprise_Id(String nickname, Long enterpriseId);
 
-    User findByNickname(String nickname);
+    Optional<User> findByNickname(String nickname);
 
 }
