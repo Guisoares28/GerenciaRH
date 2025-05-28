@@ -21,9 +21,12 @@ public class AuthService {
 
     private ModelMapper mapper = new ModelMapper();
 
-    public AuthService(UserRepository userRepository, JwtService jwtService) {
+    private final TokenEntityService tokenEntityService;
+
+    public AuthService(UserRepository userRepository, JwtService jwtService, TokenEntityService tokenEntityService) {
         this.userRepository = userRepository;
         this.jwtService = jwtService;
+        this.tokenEntityService = tokenEntityService;
     }
 
    public TokenResponseDTO Authentication(UserLoginRequestDto userLoginRequestDto) {
@@ -35,6 +38,8 @@ public class AuthService {
         }
 
        TokenEntity tokenEntity = jwtService.gerarToken(user);
+
+        tokenEntityService.saveToken(tokenEntity);
 
         return mapper.map(tokenEntity, TokenResponseDTO.class);
    }
