@@ -41,11 +41,11 @@ public class AuthService {
 
         if(tokenEntityService.verifyExistsActiveTokens(user)){
             tokenEntity = tokenEntityService.getToken();
+        }else{
+            tokenEntity = jwtService.gerarToken(user);
+
+            tokenEntityService.saveToken(tokenEntity);
         }
-
-        tokenEntity = jwtService.gerarToken(user);
-
-        tokenEntityService.saveToken(tokenEntity);
 
         return mapper.map(tokenEntity, TokenResponseDTO.class);
    }
