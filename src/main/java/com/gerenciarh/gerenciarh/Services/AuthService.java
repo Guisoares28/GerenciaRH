@@ -37,7 +37,13 @@ public class AuthService {
             throw new UnauthorizedException("Usuário ou senha incorretos");
         }
 
-       TokenEntity tokenEntity = jwtService.gerarToken(user);
+        TokenEntity tokenEntity;
+
+        if(tokenEntityService.verifyExistsActiveTokens(user)){
+            tokenEntity = tokenEntityService.getToken();
+        }
+
+        tokenEntity = jwtService.gerarToken(user);
 
         tokenEntityService.saveToken(tokenEntity);
 

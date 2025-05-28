@@ -34,6 +34,11 @@ public class TokenEntityService {
         return mapper.map(tokens,new TypeToken<List<TokenResponseDTO>>() {}.getType());
     }
 
+    public TokenEntity getToken() {
+        User user = AuthenticationUserHolder.get();
+        tokenRepository.findByUser_IdAndStatusTrue(user.getId());
+    }
+
     public void breakToken(String token) {
         User user = AuthenticationUserHolder.get();
 
@@ -42,5 +47,9 @@ public class TokenEntityService {
 
         newToken.setStatus(false);
         tokenRepository.save(newToken);
+    }
+
+    public boolean verifyExistsActiveTokens(User user) {
+        return tokenRepository.existsByUser_IdAndStatusTrue(user.getId());
     }
 }
