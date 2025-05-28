@@ -29,9 +29,10 @@ public class AuthService {
         this.tokenEntityService = tokenEntityService;
     }
 
-   public TokenResponseDTO Authentication(UserLoginRequestDto userLoginRequestDto) {
+   public TokenResponseDTO authentication(UserLoginRequestDto userLoginRequestDto) {
         User user = userRepository.findByNickname(userLoginRequestDto.nickname())
                 .orElseThrow(() -> new NotFoundException("Usuário ou senha incorretos"));
+
 
         if(!PasswordUtils.verifySenha(user.getPassword(), userLoginRequestDto.password())){
             throw new UnauthorizedException("Usuário ou senha incorretos");
@@ -40,7 +41,7 @@ public class AuthService {
         TokenEntity tokenEntity;
 
         if(tokenEntityService.verifyExistsActiveTokens(user)){
-            tokenEntity = tokenEntityService.getToken();
+            tokenEntity = tokenEntityService.getToken(user);
         }else{
             tokenEntity = jwtService.gerarToken(user);
 

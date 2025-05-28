@@ -34,8 +34,7 @@ public class TokenEntityService {
         return mapper.map(tokens,new TypeToken<List<TokenResponseDTO>>() {}.getType());
     }
 
-    public TokenEntity getToken() {
-        User user = AuthenticationUserHolder.get();
+    public TokenEntity getToken(User user) {
         return tokenRepository.findByUser_IdAndStatusTrue(user.getId());
     }
 
