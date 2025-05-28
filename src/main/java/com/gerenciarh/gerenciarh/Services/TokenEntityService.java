@@ -36,7 +36,7 @@ public class TokenEntityService {
 
     public TokenEntity getToken() {
         User user = AuthenticationUserHolder.get();
-        tokenRepository.findByUser_IdAndStatusTrue(user.getId());
+        return tokenRepository.findByUser_IdAndStatusTrue(user.getId());
     }
 
     public void breakToken(String token) {
