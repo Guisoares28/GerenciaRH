@@ -3,6 +3,8 @@ package com.gerenciarh.gerenciarh.DtosResponse;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import com.gerenciarh.gerenciarh.Enums.EnumTypeRole;
+
 public record UserResponseDto(
         String name,
         String nickname,
@@ -12,6 +14,7 @@ public record UserResponseDto(
         BigDecimal salario,
         String email,
         String cargo,
-        String departamento
+        String departamento,
+        EnumTypeRole role
 ) {
 }
