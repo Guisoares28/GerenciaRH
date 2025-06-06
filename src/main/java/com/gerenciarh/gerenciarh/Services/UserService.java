@@ -6,9 +6,12 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.gerenciarh.gerenciarh.DtosRequest.UserRequestDto;
 import com.gerenciarh.gerenciarh.DtosResponse.UserResponseDto;
 import com.gerenciarh.gerenciarh.Enums.EnumTypeRole;
+import com.gerenciarh.gerenciarh.Exceptions.BadRequestException;
 import com.gerenciarh.gerenciarh.Exceptions.NotFoundException;
 import com.gerenciarh.gerenciarh.Exceptions.RepeatDataException;
 import com.gerenciarh.gerenciarh.Exceptions.UnauthorizedException;
@@ -26,13 +29,14 @@ import jakarta.transaction.Transactional;
 @Service
 public class UserService {
 
+	
     private final UserRepository userRepository;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
     private final DepartmentRepository departmentRepository;
 
-    public UserService(UserRepository userRepository, DepartmentRepository departmentRepository) {
+    public UserService(UserRepository userRepository, DepartmentRepository departmentRepository, TokenEntityService tokenService) {
         this.userRepository = userRepository;
         this.departmentRepository = departmentRepository;
     }
@@ -80,11 +84,8 @@ public class UserService {
     public UserResponseDto getUserByNickname(String nickname) {
 
         User user = AuthenticationUserHolder.get();
-        AuthenticationUtils.toValidUserRole(user);
-
         User foundUser = userRepository.findByNicknameAndEnterprise_Id(nickname, user.getEnterprise().getId())
             .orElseThrow(() -> new NotFoundException("Usuário com " + nickname + " não encontrado"));
-
         return UserUtils.fromModelFromResponse(foundUser);
     }
 
@@ -128,7 +129,56 @@ public class UserService {
             throw new RepeatDataException();
         }
     }
-
+    
+    /* 
+    Esse método foi feito com o intuito de receber um token 
+    para garantir que o usuário 
+    não passe um nickname de outra pessoa no front end e 
+    assim altere ele
+    */
+    @Transactional
+    public void updateUserByToken(String token, UserRequestDto user) {
+    	User authenticatedUser = AuthenticationUserHolder.get();
+        
+        // Payload para pegar o nickname
+    	UserResponseDto payload = getPayload(token);
+    	
+    	
+        User userUpdate = userRepository.findByNicknameAndEnterprise_Id(payload.nickname(), authenticatedUser.getEnterprise().getId())
+                .orElseThrow(() -> new NotFoundException("usuário com " + payload.nickname() + " não encontrado"));
+    	
+        if (user.name() != null) { userUpdate.setName(user.name());}
+        
+        if (!user.nickname().equals(userUpdate.getNickname()) || user.nickname() == null || user.nickname().isEmpty() || user.nickname().isBlank()) {
+        	throw new BadRequestException("O nickname não pode ser nulo e não pode ser alterado");
+        }
+        
+        if (user.email() != null) userUpdate.setEmail(user.email());
+        
+    	userRepository.save(userUpdate);
+    }
+    
+    public UserResponseDto getPayload(String token) {
+    	DecodedJWT jwtDecoded = JWT.decode(token);
+    	String nickname = jwtDecoded.getClaim("sub").asString();
+    	UserResponseDto user = getUserByNickname(nickname);
+        if(user.role() == null) {
+            return user = new UserResponseDto(
+                    user.name(),
+                    user.nickname(),
+                    user.password(),
+                    user.contractDate(),
+                    user.cpf(),
+                    user.salario(),
+                    user.email(),
+                    user.cargo(),
+                    user.departamento(),
+                    EnumTypeRole.MASTER
+                );
+        }
+    	return user;
+    }
+    
     @Transactional
     public void deleteUser(String nickname){
 

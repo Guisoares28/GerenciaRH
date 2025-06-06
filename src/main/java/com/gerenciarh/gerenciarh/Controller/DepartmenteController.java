@@ -1,5 +1,7 @@
 package com.gerenciarh.gerenciarh.Controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -57,7 +59,10 @@ public class DepartmenteController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-
+    @GetMapping("/all")
+    public ResponseEntity<List<DepartamentoDtoResponse>> findAllDepartments(){
+    	return ResponseEntity.status(HttpStatus.OK).body(departmentService.findAllDepartmentsService());
+    }
 
 
 }
