@@ -130,6 +130,34 @@ public class UserService {
         }
     }
     
+    /* 
+    Esse método foi feito com o intuito de receber um token 
+    para garantir que o usuário 
+    não passe um nickname de outra pessoa no front end e 
+    assim altere ele
+    */
+    @Transactional
+    public void updateUserByToken(String token, UserRequestDto user) {
+    	User authenticatedUser = AuthenticationUserHolder.get();
+        
+        // Payload para pegar o nickname
+    	UserResponseDto payload = getPayload(token);
+    	
+    	
+        User userUpdate = userRepository.findByNicknameAndEnterprise_Id(payload.nickname(), authenticatedUser.getEnterprise().getId())
+                .orElseThrow(() -> new NotFoundException("usuário com " + payload.nickname() + " não encontrado"));
+    	
+        if (user.name() != null) { userUpdate.setName(user.name());}
+        
+        if (!user.nickname().equals(userUpdate.getNickname()) || user.nickname() == null || user.nickname().isEmpty() || user.nickname().isBlank()) {
+        	throw new BadRequestException("O nickname não pode ser nulo e não pode ser alterado");
+        }
+        
+        if (user.email() != null) userUpdate.setEmail(user.email());
+        
+    	userRepository.save(userUpdate);
+    }
+    
     public UserResponseDto getPayload(String token) {
     	DecodedJWT jwtDecoded = JWT.decode(token);
     	String nickname = jwtDecoded.getClaim("sub").asString();

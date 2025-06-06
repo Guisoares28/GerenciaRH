@@ -68,7 +68,14 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
     
-
+    @PutMapping("/alter")
+    public ResponseEntity<Void> updateUserByToken(@RequestHeader("Authorization") String bearerToken,
+@RequestBody UserRequestDto userRequestDto) {
+    	String token = bearerToken.replace("Bearer ", "");
+		userService.updateUserByToken(token,userRequestDto);
+		return ResponseEntity.status(HttpStatus.OK).build();
+	}
+    
     @DeleteMapping("/{nickname}")
     public ResponseEntity<Void> deleteUserByNickname(@PathVariable(value = "nickname") String nickname) {
         userService.deleteUser(nickname);
