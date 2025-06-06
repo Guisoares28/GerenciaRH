@@ -6,9 +6,12 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.gerenciarh.gerenciarh.DtosRequest.UserRequestDto;
 import com.gerenciarh.gerenciarh.DtosResponse.UserResponseDto;
 import com.gerenciarh.gerenciarh.Enums.EnumTypeRole;
+import com.gerenciarh.gerenciarh.Exceptions.BadRequestException;
 import com.gerenciarh.gerenciarh.Exceptions.NotFoundException;
 import com.gerenciarh.gerenciarh.Exceptions.RepeatDataException;
 import com.gerenciarh.gerenciarh.Exceptions.UnauthorizedException;
@@ -26,13 +29,14 @@ import jakarta.transaction.Transactional;
 @Service
 public class UserService {
 
+	
     private final UserRepository userRepository;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
     private final DepartmentRepository departmentRepository;
 
-    public UserService(UserRepository userRepository, DepartmentRepository departmentRepository) {
+    public UserService(UserRepository userRepository, DepartmentRepository departmentRepository, TokenEntityService tokenService) {
         this.userRepository = userRepository;
         this.departmentRepository = departmentRepository;
     }
@@ -80,11 +84,8 @@ public class UserService {
     public UserResponseDto getUserByNickname(String nickname) {
 
         User user = AuthenticationUserHolder.get();
-        AuthenticationUtils.toValidUserRole(user);
-
         User foundUser = userRepository.findByNicknameAndEnterprise_Id(nickname, user.getEnterprise().getId())
             .orElseThrow(() -> new NotFoundException("Usuário com " + nickname + " não encontrado"));
-
         return UserUtils.fromModelFromResponse(foundUser);
     }
 
@@ -128,7 +129,28 @@ public class UserService {
             throw new RepeatDataException();
         }
     }
-
+    
+    public UserResponseDto getPayload(String token) {
+    	DecodedJWT jwtDecoded = JWT.decode(token);
+    	String nickname = jwtDecoded.getClaim("sub").asString();
+    	UserResponseDto user = getUserByNickname(nickname);
+        if(user.role() == null) {
+            return user = new UserResponseDto(
+                    user.name(),
+                    user.nickname(),
+                    user.password(),
+                    user.contractDate(),
+                    user.cpf(),
+                    user.salario(),
+                    user.email(),
+                    user.cargo(),
+                    user.departamento(),
+                    EnumTypeRole.MASTER
+                );
+        }
+    	return user;
+    }
+    
     @Transactional
     public void deleteUser(String nickname){
 

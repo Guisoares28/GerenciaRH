@@ -29,7 +29,7 @@ public class UserUtils {
         return users.stream()
         .filter(user -> user.getDepartment() != null)
         .map(user -> new UserResponseDto(user.getName(),user.getNickname(),user.getPassword(),
-        user.getContractDate(), user.getCpf(), user.getSalario(), user.getEmail(), user.getCargo(), user.getDepartment().getname())
+        user.getContractDate(), user.getCpf(), user.getSalario(), user.getEmail(), user.getCargo(), user.getDepartment().getname(), user.getRole())
         ).toList();
     }
 
@@ -42,7 +42,8 @@ public class UserUtils {
             user.getCpf(),
             user.getSalario(),user.getEmail(),
             user.getCargo(),
-            user.getDepartment().getname()
+            user.getDepartment() != null? user.getDepartment().getname(): null ,
+            user.getRole()
         );
 
     }

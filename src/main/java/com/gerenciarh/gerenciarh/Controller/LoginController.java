@@ -1,18 +1,17 @@
 package com.gerenciarh.gerenciarh.Controller;
 
-import com.gerenciarh.gerenciarh.DtosRequest.UserLoginRequestDto;
-import com.gerenciarh.gerenciarh.DtosResponse.TokenResponseDTO;
-import com.gerenciarh.gerenciarh.Models.User;
-import com.gerenciarh.gerenciarh.Services.AuthService;
-import com.gerenciarh.gerenciarh.Services.JwtService;
-import com.gerenciarh.gerenciarh.Services.TokenEntityService;
-import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.gerenciarh.gerenciarh.DtosRequest.UserLoginRequestDto;
+import com.gerenciarh.gerenciarh.DtosResponse.TokenResponseDTO;
+import com.gerenciarh.gerenciarh.Services.AuthService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @CrossOrigin("*")
